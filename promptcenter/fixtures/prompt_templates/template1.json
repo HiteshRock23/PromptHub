@@ -1,0 +1,14 @@
+{
+  "title": "Reusable Prompt Template",
+  "description": "A structured, reusable prompt template with sections for role, context, task, constraints (length, tone, format), examples, and notes.",
+  "tags": [
+    "template",
+    "structure",
+    "role",
+    "context",
+    "constraints",
+    "examples",
+    "xml"
+  ],
+  "prompt": "<promptTemplate>\n  <role>\n    <!-- Define the persona or expertise the AI should assume -->\n    Act as a [specific role/persona, e.g., \"senior software engineer\"]\n  </role>\n\n  <context>\n    <!-- Provide essential background or scenario details -->\n    [Insert relevant background information, e.g., project goals, domain knowledge]\n  </context>\n\n  <task>\n    <!-- State the main objective clearly -->\n    [Describe exactly what needs to be done, e.g., \"Generate optimized Python code for data processing\"]\n  </task>\n\n  <constraints>\n    <length>\n      <!-- Specify length requirements -->\n      [e.g., \"200 words maximum\" or \"detailed step-by-step\"]\n    </length>\n    <tone>\n      <!-- Define style, tone, or voice -->\n      [e.g., \"professional and concise\" or \"friendly and engaging\"]\n    </tone>\n    <format>\n      <!-- Define desired output format -->\n      [e.g., \"XML\", \"Markdown\", \"bullet points\"]\n    </format>\n  </constraints>\n\n  <examples>\n    <example>\n      <!-- Provide sample input/output for guidance -->\n      [Insert one or more examples of expected outputs]\n    </example>\n  </examples>\n\n  <notes>\n    <!-- Optional: Extra instructions, edge cases, or special rules -->\n    [Add clarifications if needed, e.g., \"Avoid technical jargon\" or \"Ensure cross-platform compatibility\"]\n  </notes>\n</promptTemplate>\n"
+}

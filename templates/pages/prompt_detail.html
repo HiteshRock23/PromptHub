@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PromptHub · {{ title }}</title>
+    <link rel="stylesheet" href="/static/global.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" />
+    <style>
+        .editor-wrap{display:none;position:relative;margin-top:12px;border:1px solid var(--border);border-radius:12px;background:#0b1220;overflow:hidden}
+        .editor-lines{position:absolute;inset:0 auto 0 0;width:3.2em;padding:12px 8px;text-align:right;color:#6b7280;user-select:none;pointer-events:none;white-space:pre;line-height:1.5}
+        .editor-textarea{display:block;width:100%;height:280px;box-sizing:border-box;border:0;outline:0;resize:vertical;background:transparent;color:#e5e7eb;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;padding:12px 12px 12px calc(3.2em + 16px);line-height:1.5}
+    </style>
+</head>
+<body class="theme-dark">
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand"><a href="/hub/" class="brand-link" style="text-decoration:none;color:inherit">PromptHub</a></h1>
+            <nav class="nav">
+                <a href="/hub/" class="nav-link">Hub</a>
+                <a href="/contribute/" class="nav-link">Contribute</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container section" style="animation:fadeIn .3s ease-out both">
+        <div class="detail-card" style="background:linear-gradient(180deg,#0d1117,#161b22);border:1px solid var(--border);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.35);padding:18px">
+            <div class="detail-header" style="display:flex;justify-content:space-between;gap:12px;align-items:start">
+                <div>
+                    <h2 class="section-title" style="margin:0">{{ title }}</h2>
+                    <p class="section-sub" id="detail-sub" style="margin:4px 0 8px">Language: XML · <span class="pill">Beginner</span> · <span class="pill">API</span></p>
+                    <div class="meta" id="detail-badges">
+                        <span class="pill">JavaScript</span>
+                        <span class="pill">XML</span>
+                        <span class="pill">Prompt</span>
+                    </div>
+                    <p class="section-sub" style="margin-top:8px">Added by <strong>@prompthub</strong> · 2 days ago</p>
+                </div>
+                <div class="action-group" style="display:flex;gap:8px">
+                    <button id="detail-copy" class="btn btn-primary" style="transform:translateZ(0)">Copy</button>
+                    <button id="detail-edit" class="btn btn-secondary">Edit</button>
+                </div>
+            </div>
+            <div class="code-wrap" style="position:relative;margin-top:12px">
+                <button id="code-copy" class="icon-btn copy-top" aria-label="Copy code">📋</button>
+                <pre class="line-numbers" style="margin:0;border:1px solid var(--border);border-radius:12px;overflow:auto;background:#0b1220"><code id="code-block" class="language-markup"></code></pre>
+            </div>
+            <div class="detail-actions" style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+                <button id="detail-up" class="rating-btn rating-btn--up" aria-label="Helpful" title="Helpful">
+                    <span class="rating-icon">👍</span>
+                    <span id="detail-up-count" class="rating-count"></span>
+                </button>
+                <button id="detail-down" class="rating-btn rating-btn--down" aria-label="Not Helpful" title="Not Helpful">
+                    <span class="rating-icon">👎</span>
+                    <span id="detail-down-count" class="rating-count"></span>
+                </button>
+            </div>
+            <div id="detail-editor-wrap" class="editor-wrap">
+                <button id="detail-editor-copy" class="icon-btn copy-top" aria-label="Copy edited code">📋</button>
+                <div id="detail-editor-lines" class="editor-lines" aria-hidden="true"></div>
+                <textarea id="detail-editor" class="editor-textarea" spellcheck="false"></textarea>
+            </div>
+        </div>
+
+        <section class="section" style="padding-top:18px">
+            <h3 class="section-title">Related Prompts</h3>
+            <p class="section-sub">Coming soon: suggestions based on tags and categories.</p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span id="year"></span> PromptHub</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        const code = document.getElementById('code-block');
+        const copyBtn = document.getElementById('detail-copy');
+        const editBtn = document.getElementById('detail-edit');
+        const editorWrap = document.getElementById('detail-editor-wrap');
+        const editor = document.getElementById('detail-editor');
+        const lines = document.getElementById('detail-editor-lines');
+        const codeCopy = document.getElementById('code-copy');
+
+        // Inject content into Prism block
+        code.textContent = `{{ content|escapejs }}`;
+        if(window.Prism){ Prism.highlightElement(code); }
+
+        const copyContent = async (text, btn) => {
+            try{
+                await navigator.clipboard.writeText(text);
+                const isIcon = btn.classList.contains('icon-btn');
+                btn.textContent = isIcon ? '✔️' : 'Copied!';
+                setTimeout(()=> btn.textContent = isIcon ? '📋' : 'Copy', 900);
+            }catch(e){}
+        };
+
+        copyBtn.addEventListener('click', ()=> copyContent(code.textContent, copyBtn));
+        codeCopy.addEventListener('click', ()=> copyContent(code.textContent, codeCopy));
+
+        function updateLineNumbers(){
+            const count = (editor.value.match(/\n/g) || []).length + 1;
+            let out = '';
+            for(let i=1;i<=count;i++){ out += i + (i===count?'':'\n'); }
+            lines.textContent = out;
+        }
+
+        editor.addEventListener('input', updateLineNumbers);
+        editor.addEventListener('scroll', ()=>{
+            lines.style.transform = `translateY(${-editor.scrollTop}px)`;
+        });
+
+        const editorCopy = document.getElementById('detail-editor-copy');
+        if(editorCopy){ editorCopy.addEventListener('click', ()=> copyContent(editor.value, editorCopy)); }
+
+        editBtn.addEventListener('click', ()=>{
+            if(editorWrap.style.display==='none'){
+                editor.value = code.textContent;
+                editorWrap.style.display='block';
+                editBtn.textContent='Close Edit';
+                updateLineNumbers();
+                try { editor.setSelectionRange(0, 0); } catch(_) {}
+                editor.scrollTop = 0;
+            } else {
+                editorWrap.style.display='none';
+                editBtn.textContent='Edit';
+            }
+        });
+
+        // Rating feedback with counts (persisted, synced with cards)
+        const upBtn = document.getElementById('detail-up');
+        const downBtn = document.getElementById('detail-down');
+        const upCountEl = document.getElementById('detail-up-count');
+        const downCountEl = document.getElementById('detail-down-count');
+        const pid = String({{ pid|default:'0' }});
+        const keyState = `prompt_feedback_${pid}`;
+        const keyCounts = `prompt_feedback_counts_${pid}`;
+        function readCounts(){
+            try{ return JSON.parse(localStorage.getItem(keyCounts)||'{}'); }catch(_e){ return {}; }
+        }
+        function writeCounts(v){ try{ localStorage.setItem(keyCounts, JSON.stringify(v)); }catch(_e){} }
+        function setState(v){ try{ if(v){ localStorage.setItem(keyState, v); } else { localStorage.removeItem(keyState); } }catch(_e){} }
+        function getState(){ try{ return localStorage.getItem(keyState)||''; }catch(_e){ return ''; } }
+        function syncUI(){
+            const st = getState();
+            const c = readCounts();
+            const up = Number(c.up||0);
+            const down = Number(c.down||0);
+            upCountEl.textContent = String(up);
+            downCountEl.textContent = String(down);
+            upBtn.classList.toggle('is-active', st==='up');
+            downBtn.classList.toggle('is-active', st==='down');
+        }
+        function animate(btn){ btn.classList.add('pulse'); setTimeout(()=>btn.classList.remove('pulse'), 220); }
+        syncUI();
+        if(upBtn){
+            upBtn.addEventListener('click', ()=>{
+                const st = getState();
+                const c = readCounts(); c.up = Number(c.up||0); c.down = Number(c.down||0);
+                if(st==='up'){ setState(''); c.up = Math.max(0, c.up-1); }
+                else { setState('up'); c.up += 1; if(st==='down') c.down = Math.max(0, c.down-1); }
+                writeCounts(c); syncUI(); animate(upBtn);
+            });
+        }
+        if(downBtn){
+            downBtn.addEventListener('click', ()=>{
+                const st = getState();
+                const c = readCounts(); c.up = Number(c.up||0); c.down = Number(c.down||0);
+                if(st==='down'){ setState(''); c.down = Math.max(0, c.down-1); }
+                else { setState('down'); c.down += 1; if(st==='up') c.up = Math.max(0, c.up-1); }
+                writeCounts(c); syncUI(); animate(downBtn);
+            });
+        }
+    </script>
+</body>
+</html>
+
+

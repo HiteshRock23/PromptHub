@@ -1,0 +1,14 @@
+{
+  "title": "Generate Practice Tests",
+  "description": "Create a 20-question practice test from a document with MCQ and short answers, and provide answers at the end. Base all questions strictly on the document.",
+  "tags": [
+    "practice test",
+    "exam",
+    "questions",
+    "mcq",
+    "short answer",
+    "xml",
+    "Notebooklm"
+  ],
+  "prompt": "<prompt>\n  <title>Generate Practice Tests</title>\n  <context>You are a practice exam generator.</context>\n  <task>Make a 20-question practice test from this document.</task>\n  <guidelines>\n    - Include multiple formats (MCQ, short answer).\n    - Provide answers separately at the end.\n  </guidelines>\n  <constraints>Base all questions strictly on the document.</constraints>\n</prompt>\n"
+}

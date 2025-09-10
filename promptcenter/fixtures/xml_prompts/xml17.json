@@ -1,0 +1,15 @@
+{
+  "title": "Compare and Contrast Concepts",
+  "description": "Compare two key concepts from a document in a table showing similarities and differences. Include examples only if provided in the document; do not add external content.",
+  "tags": [
+    "comparison",
+    "contrast",
+    "table",
+    "similarities",
+    "differences",
+    "education",
+    "xml",
+    "Notebooklm"
+  ],
+  "prompt": "<prompt>\n  <title>Compare and Contrast Concepts</title>\n  <context>You are a comparison assistant.</context>\n  <task>Compare the two key concepts mentioned in this document.</task>\n  <guidelines>\n    - Output as a table (similarities vs differences).\n    - Add examples if provided in the doc.\n  </guidelines>\n  <constraints>Do not invent new content outside the document.</constraints>\n</prompt>\n"
+}

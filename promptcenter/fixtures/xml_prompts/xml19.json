@@ -1,0 +1,14 @@
+{
+  "title": "Paraphrase for Better Understanding",
+  "description": "Rewrite a section in simpler words using shorter sentences and easy vocabulary while keeping the original meaning intact.",
+  "tags": [
+    "paraphrase",
+    "simplify",
+    "education",
+    "easy vocabulary",
+    "plain language",
+    "xml",
+    "Notebooklm"
+  ],
+  "prompt": "<prompt>\n  <title>Paraphrase for Better Understanding</title>\n  <context>You are a paraphrasing tutor.</context>\n  <task>Rewrite this section in simpler words.</task>\n  <guidelines>\n    - Shorter sentences.\n    - Easy vocabulary.\n  </guidelines>\n  <constraints>Keep meaning intact, no added info.</constraints>\n</prompt>\n"
+}

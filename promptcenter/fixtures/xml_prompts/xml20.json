@@ -1,0 +1,14 @@
+{
+  "title": "Cross-Reference & Research Assistance",
+  "description": "Provide 3–5 supporting insights and references where possible to add context, using only NotebookLM-provided sources.",
+  "tags": [
+    "research",
+    "cross-reference",
+    "context",
+    "references",
+    "insights",
+    "xml",
+    "Notebooklm"
+  ],
+  "prompt": "<prompt>\n  <title>Cross-Reference & Research Assistance</title>\n  <context>You are a cross-reference guide.</context>\n  <task>Give extra context for this section using knowledge from this document and related sources.</task>\n  <guidelines>\n    - Provide 3–5 supporting insights.\n    - Add references if possible.\n  </guidelines>\n  <constraints>No fabricated sources; use only what NotebookLM provides.</constraints>\n</prompt>\n"
+}

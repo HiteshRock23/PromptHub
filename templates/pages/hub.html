@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PromptHub · Hub</title>
+    <link rel="stylesheet" href="/static/global.css" />
+    <style>
+        .editor-wrap{display:none;position:relative;margin-top:10px;border:1px solid var(--border);border-radius:12px;background:#0b1220;overflow:hidden}
+        .editor-lines{position:absolute;inset:0 auto 0 0;width:3.2em;padding:10px 8px;text-align:right;color:#6b7280;user-select:none;pointer-events:none;white-space:pre;line-height:1.5}
+        .editor-textarea{display:block;width:100%;height:220px;box-sizing:border-box;border:0;outline:0;resize:vertical;background:transparent;color:#e5e7eb;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;padding:10px 12px 10px calc(3.2em + 16px);line-height:1.5}
+    </style>
+</head>
+<body class="theme-dark">
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand"><a href="/hub/" class="brand-link" style="text-decoration:none;color:inherit">PromptHub</a></h1>
+            <nav class="nav">
+                <a href="/hub/" class="nav-link active">Hub</a>
+                <a href="/contribute/" class="nav-link">Contribute</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container section">
+        <section class="brand-section" style="text-align:center;margin:18px 0 18px; position:relative;">
+            <div style="position:absolute; left:50%; transform:translateX(-50%); width:90%; max-width:900px; height:180px; top:-30px; pointer-events:none; background:radial-gradient(closest-side, rgba(139,92,246,.18), transparent 70%);"></div>
+            <div class="brand-hero">
+                <div class="brand-icon"></div>
+                <div>
+                    <div class="brand-title" style="font-size:42px">PromptHub</div>
+                    <div class="brand-tagline" style="font-size:16px; letter-spacing:.3px">Your AI Prompt Library</div>
+                </div>
+            </div>
+            <div class="brand-divider"></div>
+        </section>
+        <div class="hub-toolbar">
+            <div class="hub-search-row">
+                <div class="search-wrap" style="width:100%">
+                    <span class="icon">🔎</span>
+                    <input id="hub-search" class="hub-search" type="search" placeholder="Search here..." />
+                </div>
+            </div>
+            <div class="tabs" role="tablist">
+                <button id="tab-prompts" class="tab-btn active" role="tab" aria-controls="prompts-section" aria-selected="true">Prompts</button>
+                <button id="tab-templates" class="tab-btn" role="tab" aria-controls="templates-section" aria-selected="false">Templates</button>
+            </div>
+        </div>
+        <section id="prompts-section" role="tabpanel">
+            <h2 class="section-title">Ready‑to‑Go Prompts</h2>
+            <p class="section-sub">Finalized prompts ready to copy and use instantly</p>
+            <div id="prompts-grid" class="grid"></div>
+        </section>
+        <section id="templates-section" role="tabpanel" class="hidden">
+            <h2 class="section-title">Prompt Templates</h2>
+            <p class="section-sub">General structures you can customize for your projects</p>
+            <div id="templates-grid" class="grid"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span id="year"></span> PromptHub</p>
+        </div>
+    </footer>
+
+    <!-- Modal for prompt details -->
+    <div id="prompt-modal" class="modal" aria-hidden="true" role="dialog">
+        <div class="modal-card">
+            <button class="modal-close" id="prompt-modal-close">✕</button>
+            <h3 id="prompt-modal-title" class="modal-title"></h3>
+            <pre id="prompt-modal-content" class="content" style="margin:0"></pre>
+            <div class="modal-actions">
+                <button id="prompt-modal-copy" class="copy-btn">Copy</button>
+                <button id="prompt-modal-edit" class="copy-btn">Edit</button>
+            </div>
+            <div id="prompt-modal-editor-wrap" class="editor-wrap">
+                <button id="prompt-modal-editor-copy" class="icon-btn copy-top" aria-label="Copy edited code">📋</button>
+                <div id="prompt-modal-lines" class="editor-lines" aria-hidden="true"></div>
+                <textarea id="prompt-modal-editor" class="editor-textarea" spellcheck="false"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/hub.js?v=4"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
+
+

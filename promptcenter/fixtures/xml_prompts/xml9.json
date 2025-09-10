@@ -1,0 +1,15 @@
+{
+  "title": "Social Anxiety Plan",
+  "description": "Act like a pro therapist. Create a structured therapy goal-setting plan focused on reducing social anxiety, with clear, encouraging steps; output as a plan.",
+  "tags": [
+    "therapy",
+    "mental health",
+    "social anxiety",
+    "goal setting",
+    "plan",
+    "encouraging",
+    "structured",
+    "xml"
+  ],
+  "prompt": "<prompt>\n  <title>Social Anxiety Plan</title>\n  <role>Act like a pro therapist</role>\n  <task>Create a structured therapy goal-setting plan</task>\n\n  <request>\n    <task>TherapyGoalSetting</task>\n    <focus>Reducing social anxiety</focus>\n    <steps>\n      <item>Define fear</item>\n      <item>Rate intensity (1–10)</item>\n      <item>Set small exposure task</item>\n      <item>Reflect on outcome</item>\n    </steps>\n    <tone>Encouraging and structured</tone>\n    <output format=\"plan\"/>\n  </request>\n</prompt>\n"
+}

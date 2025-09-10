@@ -1,0 +1,13 @@
+{
+  "title": "Conditional Task Template",
+  "description": "A reusable template for conditional workflows: define a condition, specify then/else actions with expected outputs, declare variables, and add validation criteria and notes.",
+  "tags": [
+    "template",
+    "conditional",
+    "variables",
+    "validation",
+    "notes",
+    "xml"
+  ],
+  "prompt": "<promptTemplate>\n  <conditionalTask>\n    <scenario>\n      <condition expression='[Insert condition here]'>\n        <then>\n          <action>[Define action if condition is true]</action>\n          <expectedOutput>[Expected result when true]</expectedOutput>\n        </then>\n        <else>\n          <action>[Define action if condition is false]</action>\n          <expectedOutput>[Expected result when false]</expectedOutput>\n        </else>\n      </condition>\n    </scenario>\n\n    <variables>\n      <variable name='audience'>[Target audience]</variable>\n      <variable name='goal'>[Desired outcome]</variable>\n      <variable name='context'>[Optional: Additional context]</variable>\n    </variables>\n\n    <validation>\n      <criteria>[Define how to check if the conditional task succeeded]</criteria>\n    </validation>\n\n    <notes>\n      [Optional: Add clarifications, rules, or edge case handling]\n    </notes>\n  </conditionalTask>\n</promptTemplate>\n"
+}

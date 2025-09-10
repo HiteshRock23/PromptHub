@@ -1,0 +1,14 @@
+{
+  "title": "AI Education Article",
+  "description": "Act like a pro content writer. Write an inspiring and informative 800-word article on AI in Education; output as DOCX.",
+  "tags": [
+    "content writing",
+    "education",
+    "AI",
+    "article",
+    "800 words",
+    "docx",
+    "xml"
+  ],
+  "prompt": "<prompt>\n  <title>AI Education Article</title>\n  <role>Act like a pro content writer</role>\n  <task>Write a high-quality article on the given topic</task>\n\n  <request>\n    <task>WriteArticle</task>\n    <topic>AI in Education</topic>\n    <length unit=\"words\">800</length>\n    <tone>Inspiring and informative</tone>\n    <output format=\"docx\"/>\n  </request>\n</prompt>\n"
+}

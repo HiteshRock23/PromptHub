@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PromptHub · Contribute</title>
+    <link rel="stylesheet" href="/static/global.css" />
+</head>
+<body class="theme-dark">
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand"><a href="/hub/" class="brand-link" style="text-decoration:none;color:inherit">PromptHub</a></h1>
+            <nav class="nav">
+                <a href="/hub/" class="nav-link">Hub</a>
+                <a href="/contribute/" class="nav-link active">Contribute</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container section">
+        <h2 class="section-title">Contribute to <span class="text-gradient">PromptHub</span></h2>
+        <p class="section-sub">Share your best prompts with the community and help others achieve better AI results</p>
+
+        <div class="contrib-card">
+            <div class="contrib-icon">+</div>
+            <h3 class="contrib-title">Pull a PR to Contribute</h3>
+            <p class="contrib-desc">Join our open‑source community and contribute your best prompts via GitHub</p>
+            <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/your-username/prompthub">View Repository</a>
+        </div>
+
+        <!-- Contribution Guidelines -->
+        <section class="guidelines-card" aria-labelledby="guidelines-title">
+            <h3 id="guidelines-title" class="guidelines-title">Contribution Guidelines</h3>
+            <div class="guidelines-columns">
+                <div class="guidelines-col">
+                    <h4 class="guidelines-sub">✅ Do’s</h4>
+                    <ul class="guidelines-list">
+                        <li><strong>Original Content</strong> → Share prompts/templates that you wrote or customized yourself.</li>
+                        <li><strong>Clarity</strong> → Write in a clear, easy-to-understand format.</li>
+                        <li><strong>Relevance</strong> → Only submit prompts related to AI use cases.</li>
+                        <li><strong>Formatting</strong> → Use a consistent style.</li>
+                        <li><strong>Respectful Language</strong> → Keep prompts professional, safe, and inclusive.</li>
+                        <li><strong>Tested Prompts</strong> → Contribute prompts you’ve actually tried.</li>
+                        <li><strong>Helpful Notes</strong> → Add small tips for better usage.</li>
+                    </ul>
+                </div>
+                <div class="guidelines-col">
+                    <h4 class="guidelines-sub">❌ Don’ts</h4>
+                    <ul class="guidelines-list">
+                        <li><strong>Plagiarism</strong> → Don’t copy-paste prompts from other sites.</li>
+                        <li><strong>Spam</strong> → Avoid irrelevant or self-promotional content.</li>
+                        <li><strong>Offensive Content</strong> → No harmful, hateful, NSFW, or unsafe prompts.</li>
+                        <li><strong>Overly Vague Prompts</strong> → Avoid unclear or generic submissions.</li>
+                        <li><strong>Misleading Templates</strong> → Don’t submit broken or non-functional structures.</li>
+                        <li><strong>Excessive Length</strong> → Avoid confusing, overly long prompts.</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="guidelines-note"><em>“By contributing, you agree that your submission may be reviewed, edited, or removed if it doesn’t meet these guidelines.”</em></p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span id="year"></span> PromptHub</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
+
+

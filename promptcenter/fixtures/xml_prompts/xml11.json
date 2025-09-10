@@ -1,0 +1,13 @@
+{
+  "title": "Summarize PDFs and Notes",
+  "description": "Summarize a PDF into concise, bullet-point study notes under 500 words.",
+  "tags": [
+    "study",
+    "summarization",
+    "pdf",
+    "notes",
+    "xml",
+    "Notebooklm"
+  ],
+  "prompt": "<prompt>\n  <title>Summarize PDFs and Notes</title>\n  <context>You are an AI study assistant inside NotebookLM.</context>\n  <task>Summarize this PDF into clear study notes.</task>\n  <guidelines>\n    - Use bullet points.\n    - Highlight key definitions and examples.\n  </guidelines>\n  <constraints>Keep it under 500 words.</constraints>\n</prompt>\n"
+}

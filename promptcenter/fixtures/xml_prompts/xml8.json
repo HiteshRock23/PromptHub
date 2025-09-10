@@ -1,0 +1,15 @@
+{
+  "title": "30-Day Weight Loss Plan",
+  "description": "Act like a pro fitness coach. Create a comprehensive 30-day weight loss routine covering diet plan, exercise flow, and daily motivation; output as PDF.",
+  "tags": [
+    "fitness",
+    "weight loss",
+    "diet plan",
+    "exercise",
+    "motivation",
+    "30 days",
+    "pdf",
+    "xml"
+  ],
+  "prompt": "<prompt>\n  <title>30-Day Weight Loss Plan</title>\n  <role>Act like a pro fitness coach</role>\n  <task>Create a comprehensive 30-day weight loss routine</task>\n\n  <request>\n    <task>CreateRoutine</task>\n    <focus>Weight loss</focus>\n    <duration unit=\"days\">30</duration>\n    <categories>\n      <item>Diet Plan</item>\n      <item>Exercise Flow</item>\n      <item>Daily Motivation</item>\n    </categories>\n    <output format=\"pdf\"/>\n  </request>\n</prompt>\n"
+}

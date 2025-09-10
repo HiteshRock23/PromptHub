@@ -1,0 +1,13 @@
+{
+  "title": "Sales Trend Analysis",
+  "description": "Act like a pro data analyst. Analyze Sales_Q1.csv for trend analysis and produce a bar chart; output as XLSX.",
+  "tags": [
+    "data analysis",
+    "sales",
+    "trend analysis",
+    "bar chart",
+    "xlsx",
+    "xml"
+  ],
+  "prompt": "<prompt>\n  <title>Sales Trend Analysis</title>\n  <role>Act like a pro data analyst</role>\n  <task>Analyze the dataset and generate visual output</task>\n\n  <request>\n    <task>AnalyzeData</task>\n    <dataset>Sales_Q1.csv</dataset>\n    <analysis type=\"TrendAnalysis\"/>\n    <visualization>BarChart</visualization>\n    <output format=\"xlsx\"/>\n  </request>\n</prompt>\n"
+}

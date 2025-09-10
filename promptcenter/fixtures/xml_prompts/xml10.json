@@ -1,0 +1,17 @@
+{
+  "title": "Self-Acceptance Journal",
+  "description": "Create a guided self-acceptance journaling prompt with empathetic tone and open-ended questions; 300 words, output as DOCX.",
+  "tags": [
+    "therapy",
+    "self-acceptance",
+    "journal",
+    "mental health",
+    "empathetic",
+    "open-ended",
+    "300 words",
+    "docx",
+    "xml"
+  ],
+  "prompt": "<prompt>\n  <title>Self-Acceptance Journal</title>\n  <role>Act like a pro therapist</role>\n  <task>Create a guided journal for self-reflection</task>\n\n  <request>\n    <task>TherapyJournal</task>\n    <focus>Self-acceptance</focus>\n    <guidance>Use open-ended prompts encouraging vulnerability</guidance>\n    <length unit=\"words\">300</length>\n    <tone>Empathetic and safe</tone>\n    <output format=\"docx\"/>\n  </request>\n</prompt>\n"
+}
+

@@ -1,0 +1,13 @@
+{
+  "title": "Make Study Plans & Schedules",
+  "description": "Create a 2-week study plan from a syllabus, dividing topics by day with review time, capped at 3 hours daily.",
+  "tags": [
+    "study plan",
+    "schedule",
+    "education",
+    "time management",
+    "xml",
+    "Notebooklm"
+  ],
+  "prompt": "<prompt>\n  <title>Make Study Plans & Schedules</title>\n  <context>You are a study coach.</context>\n  <task>Create a 2-week study plan from this syllabus document.</task>\n  <guidelines>\n    - Divide topics by day.\n    - Add time for review.\n  </guidelines>\n  <constraints>No more than 3 hours daily.</constraints>\n</prompt>\n"
+}

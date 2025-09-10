@@ -1,0 +1,13 @@
+{
+  "title": "JS API Fetch Code",
+  "description": "Act like a pro JavaScript developer. Write clean and efficient code to fetch data from an API using async/await with proper error handling and console output.",
+  "tags": [
+    "javascript",
+    "api",
+    "fetch",
+    "async/await",
+    "error handling",
+    "xml"
+  ],
+  "prompt": "<prompt>\n  <title>JS API Fetch Code</title>\n  <role>Act like a pro JavaScript developer</role>\n  <task>Write clean and efficient code</task>\n\n  <request>\n    <task>WriteCode</task>\n    <language>JavaScript</language>\n    <goal>Fetch data from an API and display it</goal>\n    <constraints>\n      <rule>Use async/await</rule>\n      <rule>Include error handling</rule>\n      <rule>Console log output</rule>\n    </constraints>\n    <output format=\"codeOnly\"/>\n  </request>\n</prompt>\n"
+}
