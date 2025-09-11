@@ -27,3 +27,21 @@ class Prompt(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+
+class PromptVoteCounter(models.Model):
+    """Stores aggregate up/down counts per prompt id.
+
+    We use the integer prompt id from the aggregated feed (XML/JSON ordering).
+    User-specific vote state is tracked in the session; counts live here.
+    """
+
+    prompt_id = models.IntegerField(unique=True)
+    up_count = models.IntegerField(default=0)
+    down_count = models.IntegerField(default=0)
+
+    class Meta:
+        indexes = [models.Index(fields=["prompt_id"])]
+
+    def __str__(self) -> str:  # pragma: no cover
+        return f"Votes(pid={self.prompt_id}, up={self.up_count}, down={self.down_count})"

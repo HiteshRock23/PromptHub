@@ -1,7 +1,8 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 
-from .models import Prompt
+from .models import Prompt, PromptVoteCounter
 from pathlib import Path
 from django.conf import settings
 import xml.etree.ElementTree as ET
@@ -406,3 +407,73 @@ def xml_prompt_detail(request, pid: int):
             'content': 'Prompt not found',
             'pid': pid,
         })
+
+
+def _get_vote_counter(pid: int) -> PromptVoteCounter:
+    vc, _ = PromptVoteCounter.objects.get_or_create(prompt_id=pid)
+    return vc
+
+
+def _get_session_vote(request: HttpRequest, pid: int) -> str:
+    return (request.session.get('prompt_votes') or {}).get(str(pid)) or ''
+
+
+def _set_session_vote(request: HttpRequest, pid: int, vote: str) -> None:
+    votes = dict(request.session.get('prompt_votes') or {})
+    if vote:
+        votes[str(pid)] = vote
+    else:
+        votes.pop(str(pid), None)
+    request.session['prompt_votes'] = votes
+    try:
+        request.session.modified = True
+    except Exception:
+        pass
+
+
+@csrf_exempt
+def prompt_vote_api(request: HttpRequest, pid: int):
+    """Session-scoped vote API. POST {vote: 'up'|'down'|'clear'}
+    Returns {upCount, downCount, userVote}.
+    """
+    try:
+        if request.method not in ('GET', 'POST'):
+            return JsonResponse({'error': 'method_not_allowed'}, status=405)
+
+        vc = _get_vote_counter(pid)
+        if request.method == 'GET':
+            return JsonResponse({'upCount': vc.up_count, 'downCount': vc.down_count, 'userVote': _get_session_vote(request, pid)})
+
+        # POST
+        try:
+            data = json.loads(request.body.decode('utf-8') or '{}')
+        except Exception:
+            data = {}
+        vote = (data.get('vote') or '').strip().lower()
+        if vote not in ('up', 'down', 'clear'):
+            return JsonResponse({'error': 'invalid_vote'}, status=400)
+
+        prev = _get_session_vote(request, pid)
+        # Adjust counts idempotently
+        if vote == 'clear':
+            if prev == 'up':
+                vc.up_count = max(0, vc.up_count - 1)
+            elif prev == 'down':
+                vc.down_count = max(0, vc.down_count - 1)
+            _set_session_vote(request, pid, '')
+        elif vote == 'up':
+            if prev == 'down':
+                vc.down_count = max(0, vc.down_count - 1)
+            if prev != 'up':
+                vc.up_count += 1
+            _set_session_vote(request, pid, 'up')
+        elif vote == 'down':
+            if prev == 'up':
+                vc.up_count = max(0, vc.up_count - 1)
+            if prev != 'down':
+                vc.down_count += 1
+            _set_session_vote(request, pid, 'down')
+        vc.save(update_fields=['up_count', 'down_count'])
+        return JsonResponse({'upCount': vc.up_count, 'downCount': vc.down_count, 'userVote': _get_session_vote(request, pid)})
+    except Exception:
+        return JsonResponse({'error': 'server_error'}, status=500)
