@@ -70,6 +70,7 @@ To maintain quality, all prompts must follow these rules:
        "task": "Help users manage stress and anxiety with calming exercises.",
        "categories": ["mental health", "self-help"],
        "rating": 9.5
+       "author": ["Hitesh"]
      }
      ```
 
@@ -81,6 +82,7 @@ To maintain quality, all prompts must follow these rules:
        <task>Help users manage stress and anxiety with calming exercises.</task>
        <categories>mental health, self-help</categories>
        <rating>9.5</rating>
+       <author>Hitesh</author>
      </prompt>
      ```
 
@@ -91,6 +93,7 @@ To maintain quality, all prompts must follow these rules:
      Task: Help users manage stress and anxiety with calming exercises.
      Categories: mental health, self-help
      Rating: 9.5
+     author: Hitesh
      ```
 
 2. **Required Fields**
@@ -99,10 +102,12 @@ To maintain quality, all prompts must follow these rules:
    - `task` → What the AI should do  
    - `categories` → Tags for organization  
    - `rating` → Your suggested usefulness (1–10)  
+   - 'author' - your name 
 
 3. **Clarity**
    - Keep prompts **clear, concise, and reusable**.  
    - Avoid personal data, offensive, or biased content.  
+   - “Please include an author field in your prompt file with your GitHub username or name for attribution.”
 
 ---
 
