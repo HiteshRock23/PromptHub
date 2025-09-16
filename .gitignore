@@ -1,0 +1,4 @@
+data/imported/
+data/prompts_to_import/
+data/**/*.log
+
