@@ -8,9 +8,11 @@ urlpatterns = [
     path('', views.hub_view, name='hub-page'),
     path('hub/', views.hub_view),
     path('hub/p/<int:pid>/', views.xml_prompt_detail, name='xml-prompt-detail'),
+    path('image-prompts/', views.image_prompts_page, name='image-prompts-page'),
     path('contribute/', views.contribution_view, name='contribution-page'),
     path('api/prompts/<int:pid>/vote', views.prompt_vote_api, name='prompt-vote'),
     path('api/prompts/', views.prompts_api, name='prompts-api'),
+    path('api/image-prompts/', views.image_prompts_api, name='image-prompts-api'),
     path('api/xml-prompts/', views.xml_prompts_api, name='xml-prompts-api'),
 ]
 

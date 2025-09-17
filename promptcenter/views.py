@@ -2,7 +2,7 @@ from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 
-from .models import Prompt, PromptVoteCounter
+from .models import Prompt, PromptVoteCounter, ImagePrompt
 from pathlib import Path
 from django.conf import settings
 import xml.etree.ElementTree as ET
@@ -25,10 +25,33 @@ def contribution_view(request):
 def prompts_api(request):
     prompts = list(
         Prompt.objects.values(
-            'id', 'title', 'description', 'category', 'role', 'content', 'format'
+            'id', 'title', 'description', 'category', 'role', 'tags', 'prompt', 'content', 'format'
         )
     )
     return JsonResponse({'prompts': prompts})
+
+
+def image_prompts_api(request):
+    items = []
+    for p in ImagePrompt.objects.all():
+        try:
+            image_url = p.image.url
+        except Exception:
+            image_url = ''
+        items.append({
+            'id': p.id,
+            'title': p.title,
+            'description': p.description,
+            'tags': p.tags or [],
+            'prompt': p.prompt_text,
+            'imageUrl': image_url,
+            'createdAt': p.created_at.isoformat(),
+        })
+    return JsonResponse({'items': items})
+
+
+def image_prompts_page(request):
+    return render(request, 'pages/image_prompts.html')
 
 
 def xml_prompts_api(request):
@@ -285,120 +308,18 @@ def xml_prompts_api(request):
 
 
 def xml_prompt_detail(request, pid: int):
-    """Render a dedicated page for a single prompt (XML or JSON) by position id.
-    The ordering mirrors xml_prompts_api: XML items first (if present), then JSON files.
-    """
+    """Render a dedicated page for a single prompt by database id."""
     try:
-        # Build combined items list
-        items = []
-        idx = 1
-
-        # XML sources
-        candidate_paths = [
-            Path(__file__).resolve().parent / 'fixtures' / 'prompthub.xml',
-            Path(settings.BASE_DIR) / 'promptcenter' / 'fixtures' / 'prompthub.xml',
-            Path('promptcenter/fixtures/prompthub.xml'),
-        ]
-        xml_path = next((p for p in candidate_paths if p.exists()), None)
-        if xml_path is not None:
-            try:
-                tree = ET.parse(str(xml_path)); root = tree.getroot()
-            except ET.ParseError:
-                raw = xml_path.read_text(encoding='utf-8')
-                root = ET.fromstring(f"<prompts>\n{raw}\n</prompts>")
-            for req in root.findall('request'):
-                title = (req.findtext('task') or f'Prompt {idx}').strip()
-                content = ET.tostring(req, encoding='unicode')
-                items.append({'title': title, 'content': content})
-                idx += 1
-
-        # JSON sources
-        json_dir_candidates = [
-            Path(__file__).resolve().parent / 'fixtures' / 'xml_prompts',
-            Path(settings.BASE_DIR) / 'promptcenter' / 'fixtures' / 'xml_prompts',
-            Path('promptcenter/fixtures/xml_prompts'),
-        ]
-        json_dir = next((p for p in json_dir_candidates if p.exists()), None)
-        if json_dir is not None and json_dir.is_dir():
-            for json_path in sorted(json_dir.glob('*.json')):
-                try:
-                    data = json.loads(json_path.read_text(encoding='utf-8') or '{}')
-                except Exception:
-                    data = {}
-                content = str(data.get('prompt') or '')
-                if not content:
-                    continue
-                title = (data.get('title') or f'Prompt {idx}').strip()
-                items.append({'title': title, 'content': content})
-                idx += 1
-
-        # Plaintext prompts (fixtures/plaintext_prompts)
-        try:
-            plain_dir_candidates = [
-                Path(__file__).resolve().parent / 'fixtures' / 'plaintext_prompts',
-                Path(settings.BASE_DIR) / 'promptcenter' / 'fixtures' / 'plaintext_prompts',
-                Path('promptcenter/fixtures/plaintext_prompts'),
-            ]
-            plain_dir = next((p for p in plain_dir_candidates if p.exists()), None)
-            if plain_dir is not None and plain_dir.is_dir():
-                for ppath in sorted(plain_dir.glob('*.json')):
-                    try:
-                        pdata = json.loads(ppath.read_text(encoding='utf-8') or '{}')
-                    except Exception:
-                        pdata = {}
-                    content = str(pdata.get('prompt') or '')
-                    if not content:
-                        continue
-                    title = (pdata.get('title') or ppath.stem or f'Prompt {idx}').strip()
-                    items.append({'title': title, 'content': content})
-                    idx += 1
-        except Exception:
-            pass
-
-        # Template sources (fixtures/prompt_templates) – mirror xml_prompts_api ordering
-        try:
-            tmpl_dir_candidates = [
-                Path(__file__).resolve().parent / 'fixtures' / 'prompt_templates',
-                Path(settings.BASE_DIR) / 'promptcenter' / 'fixtures' / 'prompt_templates',
-                Path('promptcenter/fixtures/prompt_templates'),
-            ]
-            tmpl_dir = next((p for p in tmpl_dir_candidates if p.exists()), None)
-            if tmpl_dir is not None and tmpl_dir.is_dir():
-                for tpath in sorted(tmpl_dir.glob('*')):
-                    if tpath.suffix.lower() == '.json':
-                        try:
-                            data = json.loads(tpath.read_text(encoding='utf-8') or '{}')
-                        except Exception:
-                            data = {}
-                        content = str(data.get('prompt') or '')
-                        if not content:
-                            # fallback to XML with same stem
-                            xml_alt = tpath.with_suffix('.xml')
-                            if xml_alt.exists():
-                                try:
-                                    content = xml_alt.read_text(encoding='utf-8')
-                                except Exception:
-                                    content = ''
-                        if not content:
-                            continue
-                        title = (data.get('title') or tpath.stem or f'Template {idx}').strip()
-                        items.append({'title': title, 'content': content})
-                        idx += 1
-        except Exception:
-            pass
-
-        if not items:
+        prompt = Prompt.objects.filter(pk=pid).values('title', 'content').first()
+        if not prompt:
             return render(request, 'pages/prompt_detail.html', {
                 'title': 'Prompt',
                 'content': 'Prompt not found',
+                'pid': pid,
             })
-
-        # Clamp pid and render
-        pos = max(1, min(pid, len(items))) - 1
-        sel = items[pos]
         return render(request, 'pages/prompt_detail.html', {
-            'title': sel['title'],
-            'content': sel['content'],
+            'title': prompt['title'] or 'Prompt',
+            'content': prompt['content'] or '',
             'pid': pid,
         })
     except Exception:

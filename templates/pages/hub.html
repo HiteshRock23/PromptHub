@@ -46,18 +46,20 @@
             </div>
             <div class="tabs" role="tablist">
                 <button id="tab-prompts" class="tab-btn active" role="tab" aria-controls="prompts-section" aria-selected="true">Prompts</button>
-                <button id="tab-templates" class="tab-btn" role="tab" aria-controls="templates-section" aria-selected="false">Templates</button>
+                <button id="tab-images" class="tab-btn" role="tab" aria-controls="images-section" aria-selected="false">Images</button>
             </div>
         </div>
+        <!-- Inline Image Prompts section placed between search and main prompts -->
+        <section id="images-section" role="tabpanel" class="hidden" style="margin-top:10px;">
+            <h2 class="section-title">Image Prompts</h2>
+            <p class="section-sub">Click an image to view and copy the prompt</p>
+            <div id="images-grid" class="grid"></div>
+        </section>
+
         <section id="prompts-section" role="tabpanel">
             <h2 class="section-title">Ready‑to‑Go Prompts</h2>
             <p class="section-sub">Finalized prompts ready to copy and use instantly</p>
             <div id="prompts-grid" class="grid"></div>
-        </section>
-        <section id="templates-section" role="tabpanel" class="hidden">
-            <h2 class="section-title">Prompt Templates</h2>
-            <p class="section-sub">General structures you can customize for your projects</p>
-            <div id="templates-grid" class="grid"></div>
         </section>
     </main>
 
@@ -80,25 +82,32 @@
         </div>
     </footer>
 
-    <!-- Modal for prompt details -->
+    <!-- Modal for prompt details (supports optional image) -->
     <div id="prompt-modal" class="modal" aria-hidden="true" role="dialog">
         <div class="modal-card">
             <button class="modal-close" id="prompt-modal-close">✕</button>
             <h3 id="prompt-modal-title" class="modal-title"></h3>
-            <pre id="prompt-modal-content" class="content" style="margin:0"></pre>
-            <div class="modal-actions">
-                <button id="prompt-modal-copy" class="copy-btn">Copy</button>
-                <button id="prompt-modal-edit" class="copy-btn">Edit</button>
-            </div>
-            <div id="prompt-modal-editor-wrap" class="editor-wrap">
-                <button id="prompt-modal-editor-copy" class="icon-btn copy-top" aria-label="Copy edited code">📋</button>
-                <div id="prompt-modal-lines" class="editor-lines" aria-hidden="true"></div>
-                <textarea id="prompt-modal-editor" class="editor-textarea" spellcheck="false"></textarea>
+            <div class="modal-2col">
+                <div class="modal-col-left">
+                    <img id="prompt-modal-image" alt="preview" style="display:none;" />
+                </div>
+                <div class="modal-col-right">
+                    <pre id="prompt-modal-content" class="content" style="margin:0"></pre>
+                    <div class="modal-actions">
+                        <button id="prompt-modal-copy" class="copy-btn">Copy</button>
+                        <button id="prompt-modal-edit" class="copy-btn">Edit</button>
+                    </div>
+                    <div id="prompt-modal-editor-wrap" class="editor-wrap">
+                        <button id="prompt-modal-editor-copy" class="icon-btn copy-top" aria-label="Copy edited code">📋</button>
+                        <div id="prompt-modal-lines" class="editor-lines" aria-hidden="true"></div>
+                        <textarea id="prompt-modal-editor" class="editor-textarea" spellcheck="false"></textarea>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="/static/hub.js?v=6"></script>
+    <script src="/static/hub.js?v=8"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
