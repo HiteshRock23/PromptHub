@@ -138,18 +138,7 @@ function createImageCard(item){
   const title = document.createElement('h3');
   title.className = 'img-card-title';
   title.textContent = item.title || 'Image Prompt';
-  const tagRow = document.createElement('div');
-  tagRow.className = 'img-card-tags';
-  if(Array.isArray(item.tags)){
-    item.tags.slice(0,4).forEach(t => {
-      const tag = document.createElement('span');
-      tag.className = 'pill';
-      tag.textContent = String(t);
-      tagRow.appendChild(tag);
-    });
-  }
   overlay.appendChild(title);
-  overlay.appendChild(tagRow);
 
   const copyIcon = document.createElement('button');
   copyIcon.className = 'icon-btn copy-top';

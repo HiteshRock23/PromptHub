@@ -121,10 +121,11 @@ body{background:
 .img-card:hover .img-card-img{transform:scale(1.05)}
 .img-card-overlay{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;background:linear-gradient(180deg,rgba(7,10,16,0) 0%, rgba(10,15,26,.35) 25%, rgba(10,15,26,.72) 70%, rgba(10,15,26,.92) 100%);text-align:center}
 .img-card-title{margin:0;font-size:16px;color:#f0f6ff;font-weight:800;text-shadow:0 2px 10px rgba(0,0,0,.4)}
-.img-card-tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px}
-.img-card .pill{background:rgba(20,26,40,.8)}
+.img-card-tags{display:none}
 .img-card .icon-btn.copy-top{background:rgba(22,35,52,.85);backdrop-filter:saturate(140%) blur(2px);border-color:rgba(255,255,255,.08)}
 .img-card .icon-btn.copy-top:hover{box-shadow:0 0 0 3px rgba(124,77,255,.18)}
+/* Hide tag row on first image card only */
+#images-grid .img-card:first-child .img-card-tags{display:none}
 
 /* Rating controls */
 .rating-actions{display:flex;gap:10px;margin-top:auto;align-self:flex-end}
