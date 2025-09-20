@@ -78,6 +78,28 @@
         finally{ if(btn){ btn.disabled=false; btn.textContent = 'Submit'; } }
       });
     }
+
+    // Keep FAB above the footer (don't cover it)
+    function repositionFab(){
+      if(!fab) return;
+      try{
+        var siteFooter = document.querySelector('.site-footer') || document.querySelector('footer');
+        var btnMargin = 18; // matches CSS bottom spacing
+        var btnHeight = 44; // approx button height incl. padding
+        if(!siteFooter){ fab.style.bottom = btnMargin + 'px'; return; }
+        var rect = siteFooter.getBoundingClientRect();
+        var overlap = (window.innerHeight - rect.top);
+        if(overlap > 0){
+          // Push up by the overlap so it stops right above the footer
+          fab.style.bottom = (btnMargin + overlap) + 'px';
+        }else{
+          fab.style.bottom = btnMargin + 'px';
+        }
+      }catch(_e){ /* noop */ }
+    }
+    repositionFab();
+    window.addEventListener('scroll', repositionFab, { passive: true });
+    window.addEventListener('resize', repositionFab);
   }
 
   document.addEventListener('DOMContentLoaded', wire);
