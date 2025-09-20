@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2&#m+f#2w&99ec%l$hi4@z(e270(bpr955+&!a9ons5@^ptu=4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['72.60.100.214', 'prompthub.blog']
 
 
 # Application definition
