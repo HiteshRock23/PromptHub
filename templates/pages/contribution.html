@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PromptHub · Contribute</title>
     <link rel="stylesheet" href="/static/global.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
+    <link rel="manifest" href="/static/images/site.webmanifest">
 </head>
 <body class="theme-dark">
     <header class="site-header">
@@ -81,6 +85,62 @@
             </div>
         </div>
     </footer>
+
+    <button id="fb-fab" class="feedback-fab" aria-label="Feedback">💬 Feedback</button>
+    <div id="fb-modal" class="fb-modal" aria-hidden="true" role="dialog">
+        <div class="fb-card">
+            <button id="fb-close" class="fb-close">✕</button>
+            <h3 class="fb-title">We value your feedback</h3>
+            <div class="fb-quick" style="justify-content:center;margin-bottom:6px">
+                <button data-reaction="love" title="Love it">😍</button>
+                <button data-reaction="meh" title="It’s okay">😐</button>
+                <button data-reaction="angry" title="Not good">😡</button>
+            </div>
+            <form id="fb-form">
+                <div class="fb-row">
+                    <div class="fb-field">
+                        <label for="fb-name">Name / Nickname (optional)</label>
+                        <input id="fb-name" class="fb-input" type="text" maxlength="120" />
+                    </div>
+                    <div class="fb-field">
+                        <label for="fb-email">Email (optional)</label>
+                        <input id="fb-email" class="fb-input" type="email" />
+                    </div>
+                </div>
+                <div class="fb-row">
+                    <div class="fb-field">
+                        <label for="fb-category">Category</label>
+                        <select id="fb-category" class="fb-select">
+                            <option value="experience">Experience</option>
+                            <option value="bug">Bug</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="prompt_quality">Prompt Quality</option>
+                        </select>
+                    </div>
+                    <div class="fb-field">
+                        <label>Rating</label>
+                        <div class="fb-stars" id="fb-stars" aria-label="Rating 1 to 5">
+                            <span data-val="1" class="fb-star">★</span>
+                            <span data-val="2" class="fb-star">★</span>
+                            <span data-val="3" class="fb-star">★</span>
+                            <span data-val="4" class="fb-star">★</span>
+                            <span data-val="5" class="fb-star">★</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="fb-field">
+                    <label for="fb-comments">Comments / Suggestions</label>
+                    <textarea id="fb-comments" class="fb-textarea" placeholder="Tell us more..."></textarea>
+                </div>
+                <div class="fb-actions">
+                    <div class="fb-hint" id="fb-hint" style="color:#9db1c7"></div>
+                    <button class="fb-submit" id="fb-submit" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/feedback.js?v=1"></script>
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();

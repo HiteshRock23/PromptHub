@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PromptHub · Hub</title>
     <link rel="stylesheet" href="/static/global.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
+    <link rel="manifest" href="/static/images/site.webmanifest">
     <style>
         .editor-wrap{display:none;position:relative;margin-top:10px;border:1px solid var(--border);border-radius:12px;background:#0b1220;overflow:hidden}
         .editor-lines{position:absolute;inset:0 auto 0 0;width:3.2em;padding:10px 8px;text-align:right;color:#6b7280;user-select:none;pointer-events:none;white-space:pre;line-height:1.5}
@@ -45,18 +49,18 @@
                 </div>
             </div>
             <div class="tabs" role="tablist">
-                <button id="tab-prompts" class="tab-btn active" role="tab" aria-controls="prompts-section" aria-selected="true">Prompts</button>
-                <button id="tab-images" class="tab-btn" role="tab" aria-controls="images-section" aria-selected="false">Images</button>
+                <button id="tab-prompts" class="tab-btn" role="tab" aria-controls="prompts-section" aria-selected="false">Prompts</button>
+                <button id="tab-images" class="tab-btn active" role="tab" aria-controls="images-section" aria-selected="true">Images</button>
             </div>
         </div>
         <!-- Inline Image Prompts section placed between search and main prompts -->
-        <section id="images-section" role="tabpanel" class="hidden" style="margin-top:10px;">
+        <section id="images-section" role="tabpanel" style="margin-top:10px;">
             <h2 class="section-title">Image Prompts</h2>
             <p class="section-sub">Click an image to view and copy the prompt</p>
             <div id="images-grid" class="grid"></div>
         </section>
 
-        <section id="prompts-section" role="tabpanel">
+        <section id="prompts-section" role="tabpanel" class="hidden">
             <h2 class="section-title">Ready‑to‑Go Prompts</h2>
             <p class="section-sub">Finalized prompts ready to copy and use instantly</p>
             <div id="prompts-grid" class="grid"></div>
@@ -93,9 +97,21 @@
                 </div>
                 <div class="modal-col-right">
                     <pre id="prompt-modal-content" class="content" style="margin:0"></pre>
-                    <div class="modal-actions">
-                        <button id="prompt-modal-copy" class="copy-btn">Copy</button>
-                        <button id="prompt-modal-edit" class="copy-btn">Edit</button>
+                    <div class="modal-actions" style="justify-content:space-between;align-items:center">
+                        <div>
+                            <button id="prompt-modal-copy" class="copy-btn">Copy</button>
+                            <button id="prompt-modal-edit" class="copy-btn">Edit</button>
+                        </div>
+                        <div class="rating-actions" id="image-rating-actions" aria-label="Feedback">
+                            <button id="img-up" class="rating-btn rating-btn--up" aria-label="Helpful" title="Helpful">
+                                <span class="rating-icon">👍</span>
+                                <span id="img-up-count" class="rating-count"></span>
+                            </button>
+                            <button id="img-down" class="rating-btn rating-btn--down" aria-label="Not Helpful" title="Not Helpful">
+                                <span class="rating-icon">👎</span>
+                                <span id="img-down-count" class="rating-count"></span>
+                            </button>
+                        </div>
                     </div>
                     <div id="prompt-modal-editor-wrap" class="editor-wrap">
                         <button id="prompt-modal-editor-copy" class="icon-btn copy-top" aria-label="Copy edited code">📋</button>
@@ -107,7 +123,63 @@
         </div>
     </div>
 
+    <button id="fb-fab" class="feedback-fab" aria-label="Feedback">💬 Feedback</button>
+    <div id="fb-modal" class="fb-modal" aria-hidden="true" role="dialog">
+        <div class="fb-card">
+            <button id="fb-close" class="fb-close">✕</button>
+            <h3 class="fb-title">We value your feedback</h3>
+            <div class="fb-quick" style="justify-content:center;margin-bottom:6px">
+                <button data-reaction="love" title="Love it">😍</button>
+                <button data-reaction="meh" title="It’s okay">😐</button>
+                <button data-reaction="angry" title="Not good">😡</button>
+            </div>
+            <form id="fb-form">
+                <div class="fb-row">
+                    <div class="fb-field">
+                        <label for="fb-name">Name / Nickname (optional)</label>
+                        <input id="fb-name" class="fb-input" type="text" maxlength="120" />
+                    </div>
+                    <div class="fb-field">
+                        <label for="fb-email">Email (optional)</label>
+                        <input id="fb-email" class="fb-input" type="email" />
+                    </div>
+                </div>
+                <div class="fb-row">
+                    <div class="fb-field">
+                        <label for="fb-category">Category</label>
+                        <select id="fb-category" class="fb-select">
+                            <option value="experience">Experience</option>
+                            <option value="bug">Bug</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="prompt_quality">Prompt Quality</option>
+                        </select>
+                    </div>
+                    <div class="fb-field">
+                        <label>Rating</label>
+                        <div class="fb-stars" id="fb-stars" aria-label="Rating 1 to 5">
+                            <span data-val="1" class="fb-star">★</span>
+                            <span data-val="2" class="fb-star">★</span>
+                            <span data-val="3" class="fb-star">★</span>
+                            <span data-val="4" class="fb-star">★</span>
+                            <span data-val="5" class="fb-star">★</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="fb-field">
+                    <label for="fb-comments">Comments / Suggestions</label>
+                    <textarea id="fb-comments" class="fb-textarea" placeholder="Tell us more..."></textarea>
+                </div>
+                <div class="fb-actions">
+                    <div class="fb-hint" id="fb-hint" style="color:#9db1c7"></div>
+                    <button class="fb-submit" id="fb-submit" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/vote.js?v=1"></script>
     <script src="/static/hub.js?v=8"></script>
+    <script src="/static/feedback.js?v=1"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>

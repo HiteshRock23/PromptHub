@@ -81,3 +81,46 @@ class ImagePrompt(models.Model):
 
     def __str__(self) -> str:  # pragma: no cover
         return self.title
+
+
+class ImageVoteCounter(models.Model):
+    """Stores aggregate up/down counts per image prompt id.
+
+    Similar to `PromptVoteCounter`, but keyed by `image_id` which is the
+    primary key of `ImagePrompt`. User vote state is session-scoped.
+    """
+
+    image_id = models.IntegerField(unique=True)
+    up_count = models.IntegerField(default=0)
+    down_count = models.IntegerField(default=0)
+
+    class Meta:
+        indexes = [models.Index(fields=["image_id"])]
+
+    def __str__(self) -> str:  # pragma: no cover
+        return f"ImageVotes(iid={self.image_id}, up={self.up_count}, down={self.down_count})"
+
+
+class Feedback(models.Model):
+    class Category(models.TextChoices):
+        EXPERIENCE = 'experience', 'Experience'
+        BUG = 'bug', 'Bug'
+        FEATURE = 'feature', 'Feature Request'
+        PROMPT_QUALITY = 'prompt_quality', 'Prompt Quality'
+
+    name = models.CharField(max_length=120, blank=True)
+    email = models.EmailField(blank=True)
+    category = models.CharField(max_length=20, choices=Category.choices)
+    rating = models.IntegerField(null=True, blank=True)
+    comments = models.TextField(blank=True)
+    prompt = models.ForeignKey(Prompt, null=True, blank=True, on_delete=models.SET_NULL)
+    reaction = models.CharField(max_length=8, blank=True)  # e.g., ":love:", ":meh:", ":angry:"
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [models.Index(fields=["category", "created_at"])]
+
+    def __str__(self) -> str:  # pragma: no cover
+        who = self.name or 'Anonymous'
+        return f"Feedback({who}, {self.category}, rating={self.rating})"

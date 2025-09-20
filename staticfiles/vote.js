@@ -1,6 +1,7 @@
 // Shared voting module to keep like/dislike behavior consistent across UI
 // Exposes: window.wireVoteControls(opts)
-// opts: { pid, upBtn, downBtn, upCountEl, downCountEl }
+// opts: { pid, upBtn, downBtn, upCountEl, downCountEl, type }
+// type: 'prompt' (default) | 'image'
 
 (function(){
 	function coerceNumber(value){
@@ -9,11 +10,12 @@
 		return n;
 	}
 
-	function makeKeys(pid){
+    function makeKeys(pid, type){
 		var id = String(pid || '');
+        var ns = (type === 'image') ? 'image' : 'prompt';
 		return {
-			state: 'prompt_feedback_' + id,
-			counts: 'prompt_feedback_counts_' + id
+            state: ns + '_feedback_' + id,
+            counts: ns + '_feedback_counts_' + id
 		};
 	}
 
@@ -99,19 +101,21 @@
 		return { state: getState(keys.state) || '', counts: c };
 	}
 
-	function postVote(pid, nextState){
-		return fetch('/api/prompts/' + encodeURIComponent(String(pid)) + '/vote', {
+    function postVote(pid, nextState, type){
+        var base = (type === 'image') ? '/api/image-prompts/' : '/api/prompts/';
+        return fetch(base + encodeURIComponent(String(pid)) + '/vote', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ vote: nextState || 'clear' })
 		}).then(function(r){ return r.json(); });
 	}
 
-	function seedCounts(pid, keys){
+    function seedCounts(pid, keys, type){
 		var hasLocalCounts = false;
 		try { hasLocalCounts = !!localStorage.getItem(keys.counts); } catch(_e){ hasLocalCounts = false; }
 		if(hasLocalCounts) return Promise.resolve();
-		return fetch('/api/prompts/' + encodeURIComponent(String(pid)) + '/vote', { method: 'GET' })
+        var base = (type === 'image') ? '/api/image-prompts/' : '/api/prompts/';
+        return fetch(base + encodeURIComponent(String(pid)) + '/vote', { method: 'GET' })
 			.then(function(r){ return r.ok ? r.json() : null; })
 			.then(function(res){
 				if(res && typeof res.upCount === 'number' && typeof res.downCount === 'number'){
@@ -121,20 +125,21 @@
 			}).catch(function(){});
 	}
 
-	window.wireVoteControls = function(opts){
+    window.wireVoteControls = function(opts){
 		var pid = String(opts && opts.pid || '');
 		var upBtn = opts && opts.upBtn;
 		var downBtn = opts && opts.downBtn;
 		var upCountEl = opts && opts.upCountEl;
 		var downCountEl = opts && opts.downCountEl;
-		var keys = makeKeys(pid);
+        var type = (opts && opts.type) || 'prompt';
+        var keys = makeKeys(pid, type);
 
 		// Default visible zeros for stability before sync
 		if(upCountEl && !upCountEl.textContent) upCountEl.textContent = '0';
 		if(downCountEl && !downCountEl.textContent) downCountEl.textContent = '0';
 
 		// Initial sync (after optional seed)
-		seedCounts(pid, keys).finally(function(){ syncUI(keys, upBtn, downBtn, upCountEl, downCountEl); });
+        seedCounts(pid, keys, type).finally(function(){ syncUI(keys, upBtn, downBtn, upCountEl, downCountEl); });
 
 		function handle(kind){
 			return function(e){
@@ -144,7 +149,7 @@
 				animate(kind === 'up' ? upBtn : downBtn);
 				var pendingBtn = kind === 'up' ? upBtn : downBtn;
 				if(pendingBtn) pendingBtn.classList.add('is-loading');
-				postVote(pid, next.state).then(function(res){
+                postVote(pid, next.state, type).then(function(res){
 					if(pendingBtn) pendingBtn.classList.remove('is-loading');
 					if(res && typeof res.upCount === 'number' && typeof res.downCount === 'number'){
 						try { localStorage.setItem(keys.counts, JSON.stringify({ up: res.upCount, down: res.downCount })); } catch(_e){}

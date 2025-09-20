@@ -2,9 +2,10 @@ from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 
-from .models import Prompt, PromptVoteCounter, ImagePrompt
+from .models import Prompt, PromptVoteCounter, ImagePrompt, ImageVoteCounter, Feedback
 from pathlib import Path
 from django.conf import settings
+from django.core.mail import send_mail
 import xml.etree.ElementTree as ET
 import json
 
@@ -396,5 +397,138 @@ def prompt_vote_api(request: HttpRequest, pid: int):
             _set_session_vote(request, pid, 'down')
         vc.save(update_fields=['up_count', 'down_count'])
         return JsonResponse({'upCount': vc.up_count, 'downCount': vc.down_count, 'userVote': _get_session_vote(request, pid)})
+    except Exception:
+        return JsonResponse({'error': 'server_error'}, status=500)
+
+
+def _get_image_vote_counter(iid: int) -> ImageVoteCounter:
+    vc, _ = ImageVoteCounter.objects.get_or_create(image_id=iid)
+    return vc
+
+
+def _get_session_image_vote(request: HttpRequest, iid: int) -> str:
+    return (request.session.get('image_votes') or {}).get(str(iid)) or ''
+
+
+def _set_session_image_vote(request: HttpRequest, iid: int, vote: str) -> None:
+    votes = dict(request.session.get('image_votes') or {})
+    if vote:
+        votes[str(iid)] = vote
+    else:
+        votes.pop(str(iid), None)
+    request.session['image_votes'] = votes
+    try:
+        request.session.modified = True
+    except Exception:
+        pass
+
+
+@csrf_exempt
+def image_vote_api(request: HttpRequest, iid: int):
+    """Session-scoped vote API for image prompts.
+    POST {vote: 'up'|'down'|'clear'} → {upCount, downCount, userVote}
+    """
+    try:
+        if request.method not in ('GET', 'POST'):
+            return JsonResponse({'error': 'method_not_allowed'}, status=405)
+
+        vc = _get_image_vote_counter(iid)
+        if request.method == 'GET':
+            return JsonResponse({'upCount': vc.up_count, 'downCount': vc.down_count, 'userVote': _get_session_image_vote(request, iid)})
+
+        try:
+            data = json.loads(request.body.decode('utf-8') or '{}')
+        except Exception:
+            data = {}
+        vote = (data.get('vote') or '').strip().lower()
+        if vote not in ('up', 'down', 'clear'):
+            return JsonResponse({'error': 'invalid_vote'}, status=400)
+
+        prev = _get_session_image_vote(request, iid)
+        if vote == 'clear':
+            if prev == 'up':
+                vc.up_count = max(0, vc.up_count - 1)
+            elif prev == 'down':
+                vc.down_count = max(0, vc.down_count - 1)
+            _set_session_image_vote(request, iid, '')
+        elif vote == 'up':
+            if prev == 'down':
+                vc.down_count = max(0, vc.down_count - 1)
+            if prev != 'up':
+                vc.up_count += 1
+            _set_session_image_vote(request, iid, 'up')
+        elif vote == 'down':
+            if prev == 'up':
+                vc.up_count = max(0, vc.up_count - 1)
+            if prev != 'down':
+                vc.down_count += 1
+            _set_session_image_vote(request, iid, 'down')
+        vc.save(update_fields=['up_count', 'down_count'])
+        return JsonResponse({'upCount': vc.up_count, 'downCount': vc.down_count, 'userVote': _get_session_image_vote(request, iid)})
+    except Exception:
+        return JsonResponse({'error': 'server_error'}, status=500)
+
+
+@csrf_exempt
+def feedback_api(request: HttpRequest):
+    """Create feedback entries via POST. GET returns minimal categories.
+
+    POST JSON: { name?, email?, category, rating?, comments?, promptId?, reaction? }
+    """
+    try:
+        if request.method == 'GET':
+            return JsonResponse({'categories': [c[0] for c in Feedback.Category.choices]})
+
+        if request.method != 'POST':
+            return JsonResponse({'error': 'method_not_allowed'}, status=405)
+
+        try:
+            data = json.loads(request.body.decode('utf-8') or '{}')
+        except Exception:
+            data = {}
+
+        category = (data.get('category') or '').strip().lower()
+        if category not in {c[0] for c in Feedback.Category.choices}:
+            return JsonResponse({'error': 'invalid_category'}, status=400)
+
+        rating = data.get('rating')
+        try:
+            rating = int(rating) if rating is not None and rating != '' else None
+        except Exception:
+            rating = None
+        rating = rating if rating is None else max(1, min(5, rating))
+
+        prompt_id = data.get('promptId')
+        prompt = None
+        if prompt_id:
+            try:
+                prompt = Prompt.objects.filter(pk=int(prompt_id)).first()
+            except Exception:
+                prompt = None
+
+        fb = Feedback.objects.create(
+            name=str(data.get('name') or '')[:120],
+            email=str(data.get('email') or '')[:254],
+            category=category,
+            rating=rating,
+            comments=str(data.get('comments') or ''),
+            prompt=prompt,
+            reaction=str(data.get('reaction') or '')[:8],
+        )
+
+        # Optional: email critical issues (bugs)
+        try:
+            if settings.DEBUG is False and category == Feedback.Category.BUG:
+                send_mail(
+                    subject=f"PromptHub Bug Report#{fb.id}",
+                    message=f"From: {fb.name or 'Anonymous'} <{fb.email or 'n/a'}>\nRating: {fb.rating}\nPrompt: {fb.prompt_id}\nComments:\n{fb.comments}",
+                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'noreply@prompthub',
+                    recipient_list=[getattr(settings, 'ADMIN_EMAIL', None) or 'admin@prompthub.local'],
+                    fail_silently=True,
+                )
+        except Exception:
+            pass
+
+        return JsonResponse({'ok': True})
     except Exception:
         return JsonResponse({'error': 'server_error'}, status=500)

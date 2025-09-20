@@ -167,6 +167,15 @@ function openImagePrompt(item){
   const editor = document.getElementById('prompt-modal-editor');
   const lines = document.getElementById('prompt-modal-lines');
   const editorCopy = document.getElementById('prompt-modal-editor-copy');
+  // Always replace vote buttons with clones to drop any prior listeners
+  const upOld = document.getElementById('img-up');
+  const downOld = document.getElementById('img-down');
+  if(upOld){ upOld.replaceWith(upOld.cloneNode(true)); }
+  if(downOld){ downOld.replaceWith(downOld.cloneNode(true)); }
+  let upBtn = document.getElementById('img-up');
+  let downBtn = document.getElementById('img-down');
+  let upCountEl = document.getElementById('img-up-count');
+  let downCountEl = document.getElementById('img-down-count');
   title.textContent = item.title || 'Image Prompt';
   content.textContent = String(item.prompt || '');
   if(img){ img.src = item.imageUrl || ''; img.style.display = item.imageUrl ? 'block' : 'none'; }
@@ -208,6 +217,17 @@ function openImagePrompt(item){
         editBtn.textContent='Edit';
       }
     };
+  }
+  // Wire vote controls for this image
+  if(window.wireVoteControls){
+    window.wireVoteControls({
+      pid: String(item.id || ''),
+      upBtn,
+      downBtn,
+      upCountEl,
+      downCountEl,
+      type: 'image'
+    });
   }
   modal.classList.add('open');
   modal.setAttribute('aria-hidden','false');
