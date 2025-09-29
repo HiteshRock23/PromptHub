@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2&#m+f#2w&99ec%l$hi4@z(e270(bpr955+&!a9ons5@^ptu=4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# Toggle via env var. Default ON for local development so media serves correctly.
+# Set DJANGO_DEBUG=0 in production.
+DEBUG = os.getenv('DJANGO_DEBUG', '1') == '1'
 
 
-ALLOWED_HOSTS = ['72.60.100.214', 'prompthub.blog', "www.prompthub.com"]
+ALLOWED_HOSTS = ['72.60.100.214', 'prompthub.blog', 'www.prompthub.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -116,11 +120,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'staticfiles',
 ]
 STATIC_ROOT = BASE_DIR / 'staticbuild'
+
+# Serve compressed static files via WhiteNoise; keeps original filenames
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Media files (uploads)
 MEDIA_URL = '/media/'

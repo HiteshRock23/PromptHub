@@ -72,91 +72,28 @@
             <div class="container footer-inner">
                 <div class="footer-left">
                     <a href="/hub/" class="footer-brand-name">PromptHub</a>
-                    <div class="footer-copy">© <span id="year"></span></div>
                 </div>
-                <div class="footer-center">Built with ❤️ by contributors</div>
-                <nav class="footer-right" aria-label="Footer">
-                    <a class="footer-link" href="/hub/">Browse Prompts</a>
-                    <a class="footer-link" target="_blank" rel="noopener" href="https://github.com/HiteshRock23/PromptHub/blob/main/CONTRIBUTING.md">Contribute</a>
-                    <span class="footer-link" aria-hidden="true">MIT License · Open Source</span>
-                </nav>
-                <a class="footer-icon corner" target="_blank" rel="noopener" href="https://github.com/HiteshRock23/PromptHub" aria-label="GitHub Repository">
-                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-                </a>
+                <div class="footer-right">
+                    <a class="gh-link" href="https://github.com/HiteshRock23/PromptHub" target="_blank" rel="noopener">GitHub</a>
+                </div>
             </div>
         </div>
     </footer>
-
-    <button id="fb-fab" class="feedback-fab" aria-label="Feedback">💬 Feedback</button>
-    <div id="fb-modal" class="fb-modal" aria-hidden="true" role="dialog">
-        <div class="fb-card">
-            <button id="fb-close" class="fb-close">✕</button>
-            <h3 class="fb-title">We value your feedback</h3>
-            <div class="fb-quick" style="justify-content:center;margin-bottom:6px">
-                <button data-reaction="love" title="Love it">😍</button>
-                <button data-reaction="meh" title="It’s okay">😐</button>
-                <button data-reaction="angry" title="Not good">😡</button>
-            </div>
-            <form id="fb-form">
-                <div class="fb-row">
-                    <div class="fb-field">
-                        <label for="fb-name">Name / Nickname (optional)</label>
-                        <input id="fb-name" class="fb-input" type="text" maxlength="120" />
-                    </div>
-                    <div class="fb-field">
-                        <label for="fb-email">Email (optional)</label>
-                        <input id="fb-email" class="fb-input" type="email" />
-                    </div>
-                </div>
-                <div class="fb-row">
-                    <div class="fb-field">
-                        <label for="fb-category">Category</label>
-                        <select id="fb-category" class="fb-select">
-                            <option value="experience">Experience</option>
-                            <option value="bug">Bug</option>
-                            <option value="feature">Feature Request</option>
-                            <option value="prompt_quality">Prompt Quality</option>
-                        </select>
-                    </div>
-                    <div class="fb-field">
-                        <label>Rating</label>
-                        <div class="fb-stars" id="fb-stars" aria-label="Rating 1 to 5">
-                            <span data-val="1" class="fb-star">★</span>
-                            <span data-val="2" class="fb-star">★</span>
-                            <span data-val="3" class="fb-star">★</span>
-                            <span data-val="4" class="fb-star">★</span>
-                            <span data-val="5" class="fb-star">★</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="fb-field">
-                    <label for="fb-comments">Comments / Suggestions</label>
-                    <textarea id="fb-comments" class="fb-textarea" placeholder="Tell us more..."></textarea>
-                </div>
-                <div class="fb-actions">
-                    <div class="fb-hint" id="fb-hint" style="color:#9db1c7"></div>
-                    <button class="fb-submit" id="fb-submit" type="submit">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script src="/static/feedback.js?v=1"></script>
-
     <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        (function(){
-            var url = 'https://github.com/HiteshRock23/PromptHub/blob/main/CONTRIBUTING.md';
+        (function() {
             var card = document.getElementById('contrib-card');
-            if(card){
-                card.addEventListener('click', function(){ window.open(url, '_blank', 'noopener'); });
-                card.addEventListener('keydown', function(e){
-                    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); window.open(url, '_blank', 'noopener'); }
+            if (card) {
+                card.addEventListener('click', function() {
+                    window.open('https://github.com/HiteshRock23/PromptHub/blob/main/CONTRIBUTING.md', '_blank');
+                });
+                card.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        window.open('https://github.com/HiteshRock23/PromptHub/blob/main/CONTRIBUTING.md', '_blank');
+                    }
                 });
             }
         })();
     </script>
 </body>
 </html>
-
-
