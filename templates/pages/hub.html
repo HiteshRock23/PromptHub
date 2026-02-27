@@ -16,55 +16,45 @@
     </style>
 </head>
 <body class="theme-dark">
-    <header class="site-header">
-        <div class="container">
-            <a class="gh-link gh-right" href="https://github.com/HiteshRock23/PromptHub" target="_blank" rel="noopener" aria-label="Project GitHub">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-            </a>
-            <h1 class="brand"><a href="/hub/" class="brand-link" style="text-decoration:none;color:inherit">PromptHub</a></h1>
-            <nav class="nav">
-                <a href="/hub/" class="nav-link active">Hub</a>
-                <a href="/contribute/" class="nav-link">Contribute</a>
-            </nav>
-        </div>
-    </header>
+
+    {% include "components/navbar.html" %}
+
+    {% include "components/hero.html" %}
+
+    {% include "components/stats.html" %}
 
     <main class="container section">
-        <section class="brand-section" style="text-align:center;margin:18px 0 18px; position:relative;">
-            <div style="position:absolute; left:50%; transform:translateX(-50%); width:90%; max-width:900px; height:180px; top:-30px; pointer-events:none; background:radial-gradient(closest-side, rgba(139,92,246,.18), transparent 70%);"></div>
-            <div class="brand-hero">
-                <div class="brand-icon"></div>
-                <div>
-                    <div class="brand-title" style="font-size:42px">PromptHub</div>
-                    <div class="brand-tagline" style="font-size:16px; letter-spacing:.3px">Your AI Prompt Library</div>
-                </div>
-            </div>
-            <div class="brand-divider"></div>
-        </section>
+
         <div class="hub-toolbar">
             <div class="hub-search-row">
                 <div class="search-wrap" style="width:100%">
                     <span class="icon">🔎</span>
-                    <input id="hub-search" class="hub-search" type="search" placeholder="Search here..." />
+                    <input id="hub-search" class="hub-search" type="search" placeholder="Search prompts..." />
                 </div>
             </div>
-            <div class="tabs" role="tablist">
-                <button id="tab-prompts" class="tab-btn" role="tab" aria-controls="prompts-section" aria-selected="false">Prompts</button>
-                <button id="tab-images" class="tab-btn active" role="tab" aria-controls="images-section" aria-selected="true">Images</button>
+            <!-- Tabs -->
+            <div class="tabs" role="tablist" style="justify-content: center; margin-top: 1rem;">
+                <button id="tab-prompts" class="tab-btn active" role="tab" aria-controls="prompts-section" aria-selected="true">Prompts</button>
+                <button id="tab-images" class="tab-btn" role="tab" aria-controls="images-section" aria-selected="false">Images</button>
             </div>
         </div>
-        <!-- Inline Image Prompts section placed between search and main prompts -->
-        <section id="images-section" role="tabpanel" style="margin-top:10px;">
-            <h2 class="section-title">Image Prompts</h2>
-            <p class="section-sub">Click an image to view and copy the prompt</p>
-            <div id="images-grid" class="grid"></div>
+
+        <section id="prompts-section" role="tabpanel" style="margin-top:20px;">
+             <div class="section-header">
+                <h2 class="section-title">Featured Prompts</h2>
+                <p class="section-sub">High-quality prompts ready for production.</p>
+            </div>
+            <div id="prompts-grid" class="grid grid-cols-3"></div>
         </section>
 
-        <section id="prompts-section" role="tabpanel" class="hidden">
-            <h2 class="section-title">Ready‑to‑Go Prompts</h2>
-            <p class="section-sub">Finalized prompts ready to copy and use instantly</p>
-            <div id="prompts-grid" class="grid"></div>
+         <section id="images-section" role="tabpanel" class="hidden" style="margin-top:20px;">
+            <div class="section-header">
+                <h2 class="section-title">Image Prompts</h2>
+                <p class="section-sub">Visual inspiration for your next creation.</p>
+            </div>
+            <div id="images-grid" class="grid grid-cols-3"></div>
         </section>
+
     </main>
 
     <div class="bottom-note">New prompts are added every day. Stay tuned for more!</div>
@@ -181,12 +171,10 @@
     </div>
 
     <script src="/static/vote.js?v=1"></script>
-    <script src="/static/hub.js?v=8"></script>
+    <script src="/static/hub.js?v=9"></script>
     <script src="/static/feedback.js?v=1"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
-
-
