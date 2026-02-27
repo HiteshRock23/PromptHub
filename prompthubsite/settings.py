@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-2&#m+f#2w&99ec%l$hi4@z(e270(bpr955+&!a9ons5@^ptu=4
 # SECURITY WARNING: don't run with debug turned on in production!
 # Toggle via env var. Default ON for local development so media serves correctly.
 # Set DJANGO_DEBUG=0 in production.
-# DEBUG = os.getenv('DJANGO_DEBUG', '1') == '1'
-DEBUG = False
+DEBUG = os.getenv('DJANGO_DEBUG', '1') == '1'
 
 
 ALLOWED_HOSTS = ['72.60.100.214', 'prompthub.blog', 'www.prompthub.com', '127.0.0.1', 'localhost']
